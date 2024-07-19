@@ -15,6 +15,14 @@ using System.Windows.Shapes;
 using System.Net;
 using System.Net.Http;
 using Microsoft.Win32;
+using System.Diagnostics;
+using System.IO;
+using System.IO.Packaging;
+using System.IO.Compression;
+using Path = System.IO.Path;
+using Ionic.Zip;
+using System.Security.Policy;
+using System.Windows.Media.Animation;
 
 namespace Minty_Launcher
 {
@@ -23,6 +31,10 @@ namespace Minty_Launcher
     /// </summary>
     public partial class MainWindow : Window
     {
+
+        private bool isDragging = false;
+        private Point dragStartPoint;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -30,26 +42,77 @@ namespace Minty_Launcher
 
         static string tempPath = Environment.GetEnvironmentVariable("TEMP");
 
-        static async Task DownloadPack()
-        {
-            IniFile config = new IniFile("settings.ini");
+        static void DownloadPack()
 
-            string dataURL = "https://github.com/kindawindytoday/Minty-Releases/releases/latest/download/minty.zip";
-
-            using (HttpClient client = new HttpClient())
             {
-                using (HttpResponseMessage response = await client.GetAsync(dataURL))
+            string url = "https://github.com/kindawindytoday/Minty-Releases/releases/latest/download/minty.zip";
+            string downloadPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),"MintyLauncher", "minty.zip");
+            string extractPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "MintyLauncher");
+            string launcherPath = Path.Combine(extractPath, "launcher.exe"); // Путь к launcher.exe
+
+            Console.WriteLine("Путь для сохранения файла: " + downloadPath);
+
+            using (WebClient client = new WebClient())
+            {
+                try
                 {
-                    if (response.IsSuccessStatusCode)
+                    if (File.Exists(launcherPath))
                     {
-                        byte[] rawFileBytes = await response.Content.ReadAsByteArrayAsync();
-                        System.IO.File.WriteAllBytes(tempPath, rawFileBytes);
-                        MessageBox.Show("Файл успешно скачан!");
+                        Process.Start(launcherPath);
+                        Console.WriteLine("Файл launcher.exe запущен.");
                     }
                     else
                     {
-                        MessageBox.Show("Произошла ошибка при скачивании пакета!");
+                     // Создаем директорию, если она не существует
+                     if (!Directory.Exists(extractPath))
+                     {
+                        Directory.CreateDirectory(extractPath);
+                        Console.WriteLine("Создана директория: " + extractPath);
+                     }
+
+                     // Скачиваем файл
+                     client.DownloadFile(url, downloadPath);
+                     Console.WriteLine("Файл успешно скачан: " + downloadPath);
+
+                     // Распаковка ZIP-архива с использованием DotNetZip
+                     using (Ionic.Zip.ZipFile zip = Ionic.Zip.ZipFile.Read(downloadPath))
+                     {
+                        zip.ExtractAll(extractPath, ExtractExistingFileAction.OverwriteSilently);
+                     }
+                     Console.WriteLine("Архив успешно распакован в: " + extractPath);
+
+                     // Удаляем ZIP-файл после распаковки
+                     File.Delete(downloadPath);
+                     Console.WriteLine("ZIP файл успешно удалён: " + downloadPath);
+
+                     // Запуск launcher.exe
+                     if (File.Exists(launcherPath))
+                     {
+                        Process.Start(launcherPath);
+                        Console.WriteLine("Файл launcher.exe запущен.");
+                     }
+                     else
+                     {
+                        Console.WriteLine("Файл launcher.exe не найден по пути: " + launcherPath);
+                     }
                     }
+                    
+                }
+                catch (UnauthorizedAccessException uaEx)
+                {
+                    Console.WriteLine("Ошибка доступа: " + uaEx.Message);
+                }
+                catch (DirectoryNotFoundException dnEx)
+                {
+                    Console.WriteLine("Директорий не найден: " + dnEx.Message);
+                }
+                catch (IOException ioEx)
+                {
+                    Console.WriteLine("Ошибка ввода-вывода: " + ioEx.Message);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Ошибка: " + ex.Message);
                 }
             }
         }
@@ -57,6 +120,125 @@ namespace Minty_Launcher
         private void DownloadClicked(object sender, RoutedEventArgs e)
         {
             DownloadPack();
+        }
+
+        static void RedownloadPack()
+        {
+
+            string url = "https://github.com/kindawindytoday/Minty-Releases/releases/latest/download/minty.zip";
+            string downloadPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "MintyLauncher", "minty.zip");
+            string extractPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "MintyLauncher");
+
+            using (WebClient client = new WebClient())
+            {
+                try
+                {
+                 // Создаем директорию, если она не существует
+                 if (!Directory.Exists(extractPath))
+                 {
+                  Directory.CreateDirectory(extractPath);
+                  Console.WriteLine("Создана директория: " + extractPath);
+                 }
+
+                 // Скачиваем файл
+                 client.DownloadFile(url, downloadPath);
+                 Console.WriteLine("Файл успешно скачан: " + downloadPath);
+
+                 // Распаковка ZIP-архива с использованием DotNetZip
+                 using (Ionic.Zip.ZipFile zip = Ionic.Zip.ZipFile.Read(downloadPath))
+                 {
+                  zip.ExtractAll(extractPath, ExtractExistingFileAction.OverwriteSilently);
+                 }
+                 Console.WriteLine("Архив успешно распакован в: " + extractPath);
+
+                 // Удаляем ZIP-файл после распаковки
+                 File.Delete(downloadPath);
+                 Console.WriteLine("ZIP файл успешно удалён: " + downloadPath);
+                }
+                catch (UnauthorizedAccessException uaEx)
+                {
+                    Console.WriteLine("Ошибка доступа: " + uaEx.Message);
+                }
+                catch (DirectoryNotFoundException dnEx)
+                {
+                    Console.WriteLine("Директорий не найден: " + dnEx.Message);
+                }
+                catch (IOException ioEx)
+                {
+                    Console.WriteLine("Ошибка ввода-вывода: " + ioEx.Message);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Ошибка: " + ex.Message);
+                }
+            }
+
+                
+        }
+
+        private void RedownloadClicked(object sender, RoutedEventArgs e)
+        {
+            RedownloadPack();
+        }
+
+        private void GitHub_Click(object sender, RoutedEventArgs e)
+        {
+            string url = "https://github.com/dispiritee/Minty-Launcher";
+            Process.Start(new ProcessStartInfo("cmd", $"/c start {url}") { CreateNoWindow = true });
+        }
+
+        private void CloseApp_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+        }
+
+        private void MinimizeApp_Click(object sender, RoutedEventArgs e)
+        {
+            this.WindowState = WindowState.Minimized;
+        }
+
+        private void OpenSettingsButton_Click(object sender, RoutedEventArgs e)
+        {
+            Settings settingsWindow = new Settings();
+            settingsWindow.Show();
+        }
+
+        private void Rectangle_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.LeftButton == MouseButtonState.Pressed)
+            {
+                isDragging = true;
+                dragStartPoint = e.GetPosition(this);
+                Mouse.Capture((Rectangle)sender);
+            }
+        }
+
+        private void Rectangle_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (isDragging)
+            {
+                Point currentMousePosition = Mouse.GetPosition(this);
+
+                // Вычисляем смещение
+                double offsetX = currentMousePosition.X - dragStartPoint.X;
+                double offsetY = currentMousePosition.Y - dragStartPoint.Y;
+
+                // Перемещаем окно на основе текущих координат мыши
+                this.Left += offsetX;
+                this.Top += offsetY;
+
+                // Обновляем точку начала перетаскивания
+                dragStartPoint = currentMousePosition;
+            }
+        }
+
+        private void Rectangle_MouseUp(object sender, MouseButtonEventArgs e)
+        {
+            if (isDragging)
+            {
+                isDragging = false;
+                Mouse.Capture(null);
+            }
         }
     }
 }

@@ -5,41 +5,84 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Minty_Launcher"
         mc:Ignorable="d"
-        Title="Minty GUI Launcher" Height="720" Width="1280">
+        Title="Minty Launcher" Height="540" Width="960" ResizeMode="NoResize" WindowStyle="None" Icon="/icon.png" Background="Transparent">
     <Window.Resources>
         <FontFamily x:Key="genFont">pack://application:,,,/Minty Launcher;component/fonts/Default_SC.ttf</FontFamily>
     </Window.Resources>
     <Grid>
-        <Image Source="pack://application:,,,/Minty Launcher;component/Images/bg.jpg"
-               Width="1280" Height="1280" />
+        <Rectangle RadiusX="15" RadiusY="15">
+            <Rectangle.Fill>
+                <ImageBrush ImageSource="pack://application:,,,/Minty Launcher;component/Images/bg.jpg"/>
+            </Rectangle.Fill>
+        </Rectangle>
+        <Rectangle HorizontalAlignment="Center" Height="30" Margin="0, 0, 0, 0" VerticalAlignment="Top" Width="960" Fill="#FF1A1A1A" RadiusX="5" RadiusY="5"
+                   MouseDown="Rectangle_MouseDown"
+                   MouseMove="Rectangle_MouseMove"
+                   MouseUp="Rectangle_MouseUp"/>
         <Image  Source="pack://application:,,,/Minty Launcher;component/Images/logo.png"
-                Width="334" Height="144"
+                Width="250.5" Height="108"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Top" 
-                Margin="10, 10, 0, 0" />
-        <Button HorizontalAlignment="Right" Margin="0,0,100,30" VerticalAlignment="Bottom" Height="72" Width="305" Click="DownloadClicked" Background="#80A8D8B5" BorderBrush="#80FFFFFF" BorderThickness="2">
+                Margin="5, 20, 0, 0" />
+        <Button HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="50" Height="50" Margin="0,0,410,26" Background="#80A8D8B5"
+                BorderBrush="#80FFFFFF"
+                BorderThickness="2">
+         <Button.Resources>
+            <Style TargetType="{x:Type Border}">
+                <Setter Property="CornerRadius" Value="13"/>
+            </Style>
+         </Button.Resources>
+            <Button.Content>
+                <Image Source="pack://application:,,,/Minty Launcher;component/Images/download.png" Width="35" Height="35" Stretch="Uniform" >
+                    <Image.Effect>
+                        <DropShadowEffect Color="Black" BlurRadius="10" ShadowDepth="5" Opacity="0.5" />
+                    </Image.Effect>
+                </Image>
+            </Button.Content>
+        </Button>
+        <Button HorizontalAlignment="Right" Margin="0,0,100,15" VerticalAlignment="Bottom" Height="72" Width="305" Click="DownloadClicked" Background="#80A8D8B5" BorderBrush="#80FFFFFF" BorderThickness="2">
             <Button.Resources>
-                    <Style TargetType="{x:Type Border}">
-                        <Setter Property="CornerRadius" Value="13"/>
-                    </Style>
-                </Button.Resources>
+                <Style TargetType="{x:Type Border}">
+                    <Setter Property="CornerRadius" Value="13"/>
+                </Style>
+            </Button.Resources>
             <TextBlock>
                 <TextBlock Text ="Play"
                     FontSize="32"
+                    FontFamily="Arial Black"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
                     Foreground="White"/>
+                <TextBlock.Effect>
+                <DropShadowEffect Color="Gray" BlurRadius="5" ShadowDepth="2" />
+                </TextBlock.Effect>
             </TextBlock>
         </Button>
         <Rectangle
-            Height="707"
             Width="80"
+            Height="510"
+            Fill="#800A0A0A"
+            RadiusX="10"
+            RadiusY="10"
             HorizontalAlignment="Right"
-            Fill="#80000000"/>
+            VerticalAlignment="Bottom">
+            <Rectangle.Effect>
+                <BlurEffect Radius="5" />
+            </Rectangle.Effect>
+        </Rectangle>
+        <Rectangle
+            Width="80"
+            Height="510"
+            Stroke="#80FFFFFF"
+            StrokeThickness="2"
+            RadiusX="10"
+            RadiusY="10"
+            HorizontalAlignment="Right"
+            VerticalAlignment="Bottom"/>
         <Button Width="60" Height="60" 
         HorizontalAlignment="Right"
         VerticalAlignment="Top"
-        Margin="0, 8, 9, 0"
+        Margin="0, 39, 9, 0"
         Background="#800A0A0A" 
         BorderBrush="#80000000" 
         BorderThickness="2"
@@ -56,7 +99,7 @@
         <Button Width="60" Height="60" 
         HorizontalAlignment="Right"
         VerticalAlignment="Top"
-        Margin="0, 75, 9, 0"
+        Margin="0, 105, 9, 0"
         Background="#800A0A0A" 
         BorderBrush="#80000000" 
         BorderThickness="2"
@@ -68,8 +111,51 @@
                     </Border>
                 </ControlTemplate>
             </Button.Template>
-            <Image Source="pack://application:,,,/Minty Launcher;component/Images/discord.png" Width="35" Height="35" Stretch="Uniform" />
+            <Image Source="pack://application:,,,/Minty Launcher;component/Images/discord.png" Width="40" Height="40" Stretch="Uniform" />
         </Button>
+        <Button Width="60" Height="60" 
+         Click="GitHub_Click"
+         HorizontalAlignment="Right"
+         VerticalAlignment="Top"
+         Margin="0, 170, 9, 0"
+         Background="#800A0A0A" 
+         BorderBrush="#80000000" 
+         BorderThickness="2"
+         Style="{StaticResource {x:Type Button}}">
+            <Button.Template>
+                <ControlTemplate TargetType="Button">
+                    <Border CornerRadius="50" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                </ControlTemplate>
+            </Button.Template>
+            <Image Source="pack://application:,,,/Minty Launcher;component/Images/github.png" Width="40" Height="40" Stretch="Uniform" />
+        </Button>
+        <Button Width="60" Height="60"
+         Click="OpenSettingsButton_Click"
+         HorizontalAlignment="Right"
+         VerticalAlignment="Top"
+         Margin="0, 465, 9, 0"
+         Background="#800A0A0A" 
+         BorderBrush="#80000000" 
+         BorderThickness="2"
+         Style="{StaticResource {x:Type Button}}">
+            <Button.Template>
+                <ControlTemplate TargetType="Button">
+                    <Border CornerRadius="50" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                </ControlTemplate>
+            </Button.Template>
+            <Image Source="pack://application:,,,/Minty Launcher;component/Images/settings.png" Width="50" Height="40" Stretch="Uniform" />
+        </Button>
+        <Button Content="✖" Foreground="White" HorizontalAlignment="Left" Margin="930,0,0,0" VerticalAlignment="Top" Height="30" Width="30" Background="Transparent" BorderThickness="0" Click="CloseApp_Click"/>
+        <Button HorizontalAlignment="Left" Margin="900,0,0,0" VerticalAlignment="Top" Height="30" Width="30" Background="Transparent" BorderThickness="0" Click="MinimizeApp_Click">
+            <Image Source="pack://application:,,,/Minty Launcher;component/Images/minimize.png" Width="18" Height="18" Stretch="Uniform" />
+        </Button>
+        <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Text="Minty Launcher" VerticalAlignment="Top" Foreground="White" FontFamily="Verdana" FontSize="16" Margin="0,5,0,0" />
+        <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="1.0b" VerticalAlignment="Top" Foreground="#80FFFFFF" FontFamily="Verdana" FontSize="12" Margin="5,8,0,0"/>
+
 
 
 
