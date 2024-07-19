@@ -48,7 +48,6 @@
             <Image Source="pack://application:,,,/Minty Launcher;component/Images/discord.png" Width="40" Height="40" Stretch="Uniform" />
         </Button>
         <TextBlock Text="Launcher Customization" Foreground="#2E2E2D" FontSize="22" FontFamily="Consolas" Margin="10,130,0,0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-        <TextBlock Text="Launcher style" Foreground="#2E2E2D" FontSize="16" FontFamily="Consolas" Margin="215,151,0,0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
         <TextBlock Text="Launcher Version : 1.0" Foreground="#2E2E2D" FontSize="22" FontFamily="Consolas" Margin="10,220,0,0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
     </Grid>
 </Window>

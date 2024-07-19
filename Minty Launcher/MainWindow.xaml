@@ -26,7 +26,8 @@
                 Margin="5, 20, 0, 0" />
         <Button HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="50" Height="50" Margin="0,0,410,26" Background="#80A8D8B5"
                 BorderBrush="#80FFFFFF"
-                BorderThickness="2">
+                BorderThickness="2"
+                Click="RedownloadClicked">
          <Button.Resources>
             <Style TargetType="{x:Type Border}">
                 <Setter Property="CornerRadius" Value="13"/>
