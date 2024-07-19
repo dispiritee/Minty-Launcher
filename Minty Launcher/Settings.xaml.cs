@@ -24,6 +24,10 @@ namespace Minty_Launcher
     /// </summary>
     public partial class Settings : Window
     {
+
+        private bool isDragging = false;
+        private Point dragStartPoint;
+
         public Settings()
         {
             InitializeComponent();
@@ -44,6 +48,44 @@ namespace Minty_Launcher
         {
             string url = "https://discord.gg/kindawindytoday";
             Process.Start(new ProcessStartInfo("cmd", $"/c start {url}") { CreateNoWindow = true });
+        }
+
+        private void Rectangle_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.LeftButton == MouseButtonState.Pressed)
+            {
+                isDragging = true;
+                dragStartPoint = e.GetPosition(this);
+                Mouse.Capture((Rectangle)sender);
+            }
+        }
+
+        private void Rectangle_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (isDragging)
+            {
+                Point currentMousePosition = Mouse.GetPosition(this);
+
+                // Вычисляем смещение
+                double offsetX = currentMousePosition.X - dragStartPoint.X;
+                double offsetY = currentMousePosition.Y - dragStartPoint.Y;
+
+                // Перемещаем окно на основе текущих координат мыши
+                this.Left += offsetX;
+                this.Top += offsetY;
+
+                // Обновляем точку начала перетаскивания
+                dragStartPoint = currentMousePosition;
+            }
+        }
+
+        private void Rectangle_MouseUp(object sender, MouseButtonEventArgs e)
+        {
+            if (isDragging)
+            {
+                isDragging = false;
+                Mouse.Capture(null);
+            }
         }
     }
 }

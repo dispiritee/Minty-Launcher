@@ -38,9 +38,24 @@ namespace Minty_Launcher
         public MainWindow()
         {
             InitializeComponent();
+            this.Opacity = 0; // Устанавливаем изначальную непрозрачность 0
         }
 
         static string tempPath = Environment.GetEnvironmentVariable("TEMP");
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            // Создаем анимацию для прозрачности
+            DoubleAnimation fadeInAnimation = new DoubleAnimation
+            {
+                From = 0, // Начальное значение
+                To = 1,   // Конечное значение
+                Duration = new Duration(TimeSpan.FromSeconds(1)) // Длительность анимации
+            };
+
+            // Применяем анимацию к свойству Opacity
+            this.BeginAnimation(OpacityProperty, fadeInAnimation);
+        }
 
         static void DownloadPack()
 
@@ -184,6 +199,12 @@ namespace Minty_Launcher
         private void GitHub_Click(object sender, RoutedEventArgs e)
         {
             string url = "https://github.com/dispiritee/Minty-Launcher";
+            Process.Start(new ProcessStartInfo("cmd", $"/c start {url}") { CreateNoWindow = true });
+        }
+
+        private void Discord_Click(object sender, RoutedEventArgs e)
+        {
+            string url = "https://dsc.gg/mintylaunch";
             Process.Start(new ProcessStartInfo("cmd", $"/c start {url}") { CreateNoWindow = true });
         }
 
