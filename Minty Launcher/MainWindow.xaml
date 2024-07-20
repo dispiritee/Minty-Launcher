@@ -24,17 +24,34 @@
                 HorizontalAlignment="Left"
                 VerticalAlignment="Top" 
                 Margin="5, 20, 0, 0" />
-        <Button HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="50" Height="50" Margin="0,0,410,26" Background="#80A8D8B5"
+        <Button Name="UpdateButton" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="50" Height="50" Margin="0,0,410,26" Background="#80A8D8B5"
                 BorderBrush="#80FFFFFF"
                 BorderThickness="2"
                 Click="RedownloadClicked">
-         <Button.Resources>
-            <Style TargetType="{x:Type Border}">
-                <Setter Property="CornerRadius" Value="13"/>
-            </Style>
-         </Button.Resources>
+            <Button.Resources>
+                <Style TargetType="{x:Type Border}">
+                    <Setter Property="CornerRadius" Value="13"/>
+                </Style>
+            </Button.Resources>
             <Button.Content>
                 <Image Source="pack://application:,,,/Minty Launcher;component/Images/download.png" Width="35" Height="35" Stretch="Uniform" >
+                    <Image.Effect>
+                        <DropShadowEffect Color="Black" BlurRadius="10" ShadowDepth="5" Opacity="0.5" />
+                    </Image.Effect>
+                </Image>
+            </Button.Content>
+        </Button>
+        <Button HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="50" Height="50" Margin="0,0,465,26" Background="#80A8D8B5"
+        BorderBrush="#80FFFFFF"
+        BorderThickness="2"
+        Click="SelectFileButton_Click">
+            <Button.Resources>
+                <Style TargetType="{x:Type Border}">
+                    <Setter Property="CornerRadius" Value="13"/>
+                </Style>
+            </Button.Resources>
+            <Button.Content>
+                <Image Source="pack://application:,,,/Minty Launcher;component/Images/config.png" Width="35" Height="35" Stretch="Uniform" >
                     <Image.Effect>
                         <DropShadowEffect Color="Black" BlurRadius="10" ShadowDepth="5" Opacity="0.5" />
                     </Image.Effect>
@@ -59,6 +76,11 @@
                 </TextBlock.Effect>
             </TextBlock>
         </Button>
+        <TextBlock Name="AnimatedTextBlock" Foreground="White" Margin="389,0,0,79" HorizontalAlignment="Left" VerticalAlignment="Bottom">
+            <TextBlock.Effect>
+                   <DropShadowEffect Color="Gray" BlurRadius="5" ShadowDepth="2" />
+                   </TextBlock.Effect>
+        </TextBlock>
         <Rectangle
             Width="80"
             Height="510"
@@ -139,7 +161,7 @@
             <Image Source="pack://application:,,,/Minty Launcher;component/Images/minimize.png" Width="18" Height="18" Stretch="Uniform" />
         </Button>
         <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Text="Minty Launcher" VerticalAlignment="Top" Foreground="White" FontFamily="Verdana" FontSize="16" Margin="0,5,0,0" />
-        <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="1.0.1b" VerticalAlignment="Top" Foreground="#80FFFFFF" FontFamily="Verdana" FontSize="12" Margin="5,8,0,0"/>
+        <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="1.0.2b" VerticalAlignment="Top" Foreground="#80FFFFFF" FontFamily="Verdana" FontSize="12" Margin="5,8,0,0"/>
 
 
 

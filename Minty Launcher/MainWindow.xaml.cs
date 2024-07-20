@@ -34,6 +34,7 @@ namespace Minty_Launcher
 
         private bool isDragging = false;
         private Point dragStartPoint;
+        private string cfgDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "MintyLauncher");
 
         public MainWindow()
         {
@@ -260,6 +261,65 @@ namespace Minty_Launcher
                 isDragging = false;
                 Mouse.Capture(null);
             }
+        }
+
+        private void SelectFileButton_Click(object sender, RoutedEventArgs e)
+        {
+            // Проверка существования директории
+            if (!Directory.Exists(cfgDirectory))
+            {
+                ShowTextWithAnimation("Такой директории не существует");
+                return;
+            }
+
+            // Открываем диалог выбора файла
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            if (openFileDialog.ShowDialog() == true)
+            {
+                string selectedFilePath = openFileDialog.FileName;
+                string destinationPath = Path.Combine(cfgDirectory, Path.GetFileName(selectedFilePath));
+
+                // Копируем файл в целевую директорию
+                File.Copy(selectedFilePath, destinationPath, true);
+                ShowTextWithAnimation("Файл успешно скопирован!");
+            }
+        }
+
+        private void ShowTextWithAnimation(string message)
+        {
+            AnimatedTextBlock.Text = message;
+
+            // Создаем Storyboard для анимации
+            Storyboard storyboard = new Storyboard();
+
+            // Анимация появления
+            DoubleAnimation fadeInAnimation = new DoubleAnimation
+            {
+                From = 0,
+                To = 1,
+                Duration = new Duration(TimeSpan.FromSeconds(1))
+            };
+            Storyboard.SetTarget(fadeInAnimation, AnimatedTextBlock);
+            Storyboard.SetTargetProperty(fadeInAnimation, new PropertyPath("Opacity"));
+            storyboard.Children.Add(fadeInAnimation);
+
+            // Анимация исчезновения
+            DoubleAnimation fadeOutAnimation = new DoubleAnimation
+            {
+                From = 1,
+                To = 0,
+                Duration = new Duration(TimeSpan.FromSeconds(1)),
+                BeginTime = TimeSpan.FromSeconds(3) // Начинаем через 3 секунды
+            };
+            Storyboard.SetTarget(fadeOutAnimation, AnimatedTextBlock);
+            Storyboard.SetTargetProperty(fadeOutAnimation, new PropertyPath("Opacity"));
+            storyboard.Children.Add(fadeOutAnimation);
+
+            // Очищаем текст после окончания анимации исчезновения
+            fadeOutAnimation.Completed += (s, e) => AnimatedTextBlock.Text = string.Empty;
+
+            // Запускаем Storyboard
+            storyboard.Begin();
         }
     }
 }
