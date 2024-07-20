@@ -326,13 +326,18 @@ namespace Minty_Launcher
 
         private void FolderButton_Click(object sender, RoutedEventArgs e)
         {
-            // Если папка уже была выбрана, просто открываем её
-            if (!string.IsNullOrEmpty(selectedFolderPath))
+            string folderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "MintyLauncher", "ScreenshotFolder.txt");
+
+            // Проверка, существует ли файл
+            if (File.Exists(folderPath))
             {
+                // Если файл существует, читаем путь из файла
+                selectedFolderPath = File.ReadAllText(folderPath);
                 Process.Start("explorer.exe", selectedFolderPath);
                 return;
             }
 
+            // Если файл не существует, открываем диалог для выбора папки
             using (var folderDialog = new FolderBrowserDialog())
             {
                 folderDialog.Description = "Выберите папку для открытия";
@@ -342,6 +347,17 @@ namespace Minty_Launcher
                 if (folderDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                 {
                     selectedFolderPath = folderDialog.SelectedPath;
+
+                    // Создаем директорию, если она не существует
+                    string launcherPath = Path.GetDirectoryName(folderPath);
+                    if (!Directory.Exists(launcherPath))
+                    {
+                        Directory.CreateDirectory(launcherPath);
+                    }
+
+                    // Сохранение пути в файл ScreenshotFolder.txt
+                    File.WriteAllText(folderPath, selectedFolderPath);
+
                     // Открытие выбранной папки в проводнике
                     Process.Start("explorer.exe", selectedFolderPath);
                 }
