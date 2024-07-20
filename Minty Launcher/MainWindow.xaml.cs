@@ -23,6 +23,7 @@ using Path = System.IO.Path;
 using Ionic.Zip;
 using System.Security.Policy;
 using System.Windows.Media.Animation;
+using System.Windows.Forms;
 
 namespace Minty_Launcher
 {
@@ -35,6 +36,7 @@ namespace Minty_Launcher
         private bool isDragging = false;
         private Point dragStartPoint;
         private string cfgDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "MintyLauncher");
+        private string selectedFolderPath; // Хранит путь к выбранной папке
 
         public MainWindow()
         {
@@ -235,7 +237,7 @@ namespace Minty_Launcher
             }
         }
 
-        private void Rectangle_MouseMove(object sender, MouseEventArgs e)
+        private void Rectangle_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
             if (isDragging)
             {
@@ -273,7 +275,7 @@ namespace Minty_Launcher
             }
 
             // Открываем диалог выбора файла
-            OpenFileDialog openFileDialog = new OpenFileDialog();
+            Microsoft.Win32.OpenFileDialog openFileDialog = new Microsoft.Win32.OpenFileDialog();
             if (openFileDialog.ShowDialog() == true)
             {
                 string selectedFilePath = openFileDialog.FileName;
@@ -320,6 +322,30 @@ namespace Minty_Launcher
 
             // Запускаем Storyboard
             storyboard.Begin();
+        }
+
+        private void FolderButton_Click(object sender, RoutedEventArgs e)
+        {
+            // Если папка уже была выбрана, просто открываем её
+            if (!string.IsNullOrEmpty(selectedFolderPath))
+            {
+                Process.Start("explorer.exe", selectedFolderPath);
+                return;
+            }
+
+            using (var folderDialog = new FolderBrowserDialog())
+            {
+                folderDialog.Description = "Выберите папку для открытия";
+                folderDialog.ShowNewFolderButton = true; // Позволить создать новую папку
+
+                // Проверка результата диалога
+                if (folderDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                {
+                    selectedFolderPath = folderDialog.SelectedPath;
+                    // Открытие выбранной папки в проводнике
+                    Process.Start("explorer.exe", selectedFolderPath);
+                }
+            }
         }
     }
 }
