@@ -430,7 +430,7 @@ To="1.1" Duration="0:0:0.1"/>
             <Image Source="pack://application:,,,/Minty Launcher;component/Images/minimize.png" Width="18" Height="18" Stretch="Uniform" />
         </Button>
         <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Text="Minty Launcher" VerticalAlignment="Top" Foreground="White" FontFamily="Verdana" FontSize="16" Margin="0,5,0,0" />
-        <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="1.0.2b" VerticalAlignment="Top" Foreground="#80FFFFFF" FontFamily="Verdana" FontSize="12" Margin="5,8,0,0"/>
+        <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="1.0.3b" VerticalAlignment="Top" Foreground="#80FFFFFF" FontFamily="Verdana" FontSize="12" Margin="5,8,0,0"/>
         <Grid Margin="228,-10,-228,10">
             <Border Name="MenuPanel" Background="#80A8D8B5" Height="130" VerticalAlignment="Top" Margin="223,327,601,0" CornerRadius="10" Opacity="0">
                 <Border.RenderTransform>

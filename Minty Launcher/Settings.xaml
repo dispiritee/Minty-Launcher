@@ -52,7 +52,7 @@
         </Button>
         <TextBlock Text="Launcher Customization" Foreground="#2E2E2D" FontSize="22" FontFamily="Consolas" Margin="10,130,0,0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
         <TextBlock Text="Will be add soon..." Foreground="#2E2E2D" FontSize="18" FontFamily="Consolas" Margin="10,150,0,0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-        <TextBlock Text="Launcher Version : 1.0.2b" Foreground="#2E2E2D" FontSize="22" FontFamily="Consolas" Margin="10,220,0,0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+        <TextBlock Text="Launcher Version : 1.0.3b" Foreground="#2E2E2D" FontSize="22" FontFamily="Consolas" Margin="10,220,0,0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
         <TextBlock Text="Minty Launcher" Foreground="White" FontSize="16" FontFamily="Verdana" Margin="0,0,114,10" HorizontalAlignment="Right" VerticalAlignment="Bottom">
             <TextBlock.Effect>
                    <DropShadowEffect Color="Black" BlurRadius="5" ShadowDepth="2" />
