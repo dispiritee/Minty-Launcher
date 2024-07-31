@@ -32,18 +32,32 @@ namespace Minty_Launcher
     /// </summary>
     public partial class MainWindow : Window
     {
-
-        private bool isDragging = false;
-        private Point dragStartPoint;
         private string cfgDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "MintyLauncher");
         private string selectedFolderPath; // Хранит путь к выбранной папке
         private bool _isMenuVisible = false;
+        private string settingsFilePath;
+
 
         public MainWindow()
         {
             InitializeComponent();
+            settingsFilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "MintyLauncher", "settings.txt");
             this.Opacity = 0; // Устанавливаем изначальную непрозрачность 0
             StartFadeOut();
+
+            if (File.Exists(settingsFilePath))
+            {
+                var hideInfo = File.ReadAllText(settingsFilePath).Trim();
+                if (hideInfo.Equals("true", StringComparison.OrdinalIgnoreCase))
+                {
+                    InfoRectangle.Visibility = Visibility.Collapsed;
+                    DiscordClose.Visibility = Visibility.Collapsed;
+                    DiscordInfo.Visibility = Visibility.Collapsed;
+                    InfoRectangle2.Visibility = Visibility.Collapsed;
+                    DontShow.Visibility = Visibility.Collapsed;
+                    DontShowAgainCheckBox.Visibility = Visibility.Collapsed;
+                }
+            }
         }
 
         static string tempPath = Environment.GetEnvironmentVariable("TEMP");
@@ -456,6 +470,22 @@ namespace Minty_Launcher
         {
             Storyboard sb = (Storyboard)FindResource("MenuRedownloadUpStoryboard");
             sb.Begin();
+        }
+
+        private void HideRectangleButton_Click(object sender, RoutedEventArgs e)
+        {
+            InfoRectangle.Visibility = Visibility.Collapsed;
+            InfoRectangle2.Visibility = Visibility.Collapsed;
+            DiscordClose.Visibility = Visibility.Collapsed;
+            DiscordInfo.Visibility = Visibility.Collapsed;
+            DontShow.Visibility = Visibility.Collapsed;
+            DontShowAgainCheckBox.Visibility = Visibility.Collapsed;
+
+            // Сохранить состояние CheckBox
+            if (DontShowAgainCheckBox.IsChecked == true)
+            {
+                File.WriteAllText(settingsFilePath, "true");
+            }
         }
     }
 }
