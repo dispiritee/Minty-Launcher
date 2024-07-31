@@ -37,11 +37,13 @@ namespace Minty_Launcher
         private Point dragStartPoint;
         private string cfgDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "MintyLauncher");
         private string selectedFolderPath; // Хранит путь к выбранной папке
+        private bool _isMenuVisible = false;
 
         public MainWindow()
         {
             InitializeComponent();
             this.Opacity = 0; // Устанавливаем изначальную непрозрачность 0
+            StartFadeOut();
         }
 
         static string tempPath = Environment.GetEnvironmentVariable("TEMP");
@@ -227,42 +229,9 @@ namespace Minty_Launcher
             settingsWindow.Show();
         }
 
-        private void Rectangle_MouseDown(object sender, MouseButtonEventArgs e)
+        private void Grid_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            if (e.LeftButton == MouseButtonState.Pressed)
-            {
-                isDragging = true;
-                dragStartPoint = e.GetPosition(this);
-                Mouse.Capture((Rectangle)sender);
-            }
-        }
-
-        private void Rectangle_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
-        {
-            if (isDragging)
-            {
-                Point currentMousePosition = Mouse.GetPosition(this);
-
-                // Вычисляем смещение
-                double offsetX = currentMousePosition.X - dragStartPoint.X;
-                double offsetY = currentMousePosition.Y - dragStartPoint.Y;
-
-                // Перемещаем окно на основе текущих координат мыши
-                this.Left += offsetX;
-                this.Top += offsetY;
-
-                // Обновляем точку начала перетаскивания
-                dragStartPoint = currentMousePosition;
-            }
-        }
-
-        private void Rectangle_MouseUp(object sender, MouseButtonEventArgs e)
-        {
-            if (isDragging)
-            {
-                isDragging = false;
-                Mouse.Capture(null);
-            }
+            this.DragMove();
         }
 
         private void SelectFileButton_Click(object sender, RoutedEventArgs e)
@@ -362,6 +331,131 @@ namespace Minty_Launcher
                     Process.Start("explorer.exe", selectedFolderPath);
                 }
             }
+        }
+
+        private void StartFadeOut()
+        {
+            var fadeOutAnimation = new DoubleAnimation
+            {
+                From = 1,
+                To = 0,
+                Duration = new Duration(TimeSpan.FromSeconds(3)),
+                BeginTime = TimeSpan.FromSeconds(5)
+            };
+
+            fadeOutAnimation.Completed += (s, e) => ContentGrid.Visibility = Visibility.Collapsed;
+            ContentGrid.BeginAnimation(UIElement.OpacityProperty, fadeOutAnimation);
+        }
+
+        private void PlayButton_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            Storyboard sb = (Storyboard)FindResource("MouseEnterStoryboard");
+            sb.Begin();
+        }
+        private void PlayButton_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            Storyboard sb = (Storyboard)FindResource("MouseLeaveStoryboard");
+            sb.Begin();
+        }
+        private void PlayButton_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            Storyboard sb = (Storyboard)FindResource("MouseDownStoryboard");
+            sb.Begin();
+        }
+        private void PlayButton_MouseUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            Storyboard sb = (Storyboard)FindResource("MouseUpStoryboard");
+            sb.Begin();
+        }
+
+        private void ToggleMenuButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (_isMenuVisible)
+            {
+                HideMenu();
+            }
+            else
+            {
+                ShowMenu();
+            }
+
+            _isMenuVisible = !_isMenuVisible; // Переключаем состояние
+        }
+
+        private void ShowMenu()
+        {
+            MenuPanel.Visibility = Visibility.Visible;
+            Storyboard sb = (Storyboard)FindResource("MenuShowStoryboard");
+            sb.Begin();
+        }
+        private void HideMenu()
+        {
+            Storyboard sb = (Storyboard)FindResource("MenuHideStoryboard");
+            sb.Completed += (s, e) => MenuPanel.Visibility = Visibility.Collapsed; // Скрыть, когда закончится анимация
+            sb.Begin();
+        }
+
+        private void MenuRedownload_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            Storyboard sb = (Storyboard)FindResource("MenuRedownloadEnterStoryboard");
+            sb.Begin();
+        }
+        private void MenuRedownload_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            Storyboard sb = (Storyboard)FindResource("MenuRedownloadLeaveStoryboard");
+            sb.Begin();
+        }
+        private void MenuRedownload_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            Storyboard sb = (Storyboard)FindResource("MenuRedownloadDownStoryboard");
+            sb.Begin();
+        }
+        private void MenuRedownload_MouseUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            Storyboard sb = (Storyboard)FindResource("MenuRedownloadUpStoryboard");
+            sb.Begin();
+        }
+
+        private void MenuCfg_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            Storyboard sb = (Storyboard)FindResource("MenuRedownloadEnterStoryboard");
+            sb.Begin();
+        }
+        private void MenuCfg_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            Storyboard sb = (Storyboard)FindResource("MenuRedownloadLeaveStoryboard");
+            sb.Begin();
+        }
+        private void MenuCfg_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            Storyboard sb = (Storyboard)FindResource("MenuRedownloadDownStoryboard");
+            sb.Begin();
+        }
+        private void MenuCfg_MouseUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            Storyboard sb = (Storyboard)FindResource("MenuRedownloadUpStoryboard");
+            sb.Begin();
+        }
+
+        private void MenuScreenshot_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            Storyboard sb = (Storyboard)FindResource("MenuRedownloadEnterStoryboard");
+            sb.Begin();
+        }
+        private void MenuScreenshot_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            Storyboard sb = (Storyboard)FindResource("MenuRedownloadLeaveStoryboard");
+            sb.Begin();
+        }
+        private void MenuScreenshot_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            Storyboard sb = (Storyboard)FindResource("MenuRedownloadDownStoryboard");
+            sb.Begin();
+        }
+        private void MenuScreenshot_MouseUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            Storyboard sb = (Storyboard)FindResource("MenuRedownloadUpStoryboard");
+            sb.Begin();
         }
     }
 }
